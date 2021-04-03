@@ -1,0 +1,74 @@
+React-router dùng để chuyển hướng trang.
+Muốn sử dụng react-router: cần phải install react-router-dom vào project.
+Mục tiêu của React-router: xây dựng theo kiểu SPA(Single Page Allication): khi chuyển trang chỉ thay đổi nội dung nhưng không reload lại trang.
+Xem thêm: https://reactrouter.com/web/guides/quick-start.
+----------------------------
+
+- Khi sử dụng react-router thì các thành phần bắt buộc phải nằm trong Router mà react-router quy định
+- ví dụ khi làm chuyển trang: <Route patch=[đường dẫn] component=[page cần điều hướng tới]/>;
+-trong trường hợp xuất hiện 2 route: <Route path="/" component={abc}/>  <Route path="/a" component={xyz}/> => thì phải thêm thuộc tính <Route path="/" exact component={abc}/> 
+=> exact:là thuộc tính được định nghĩa sẵng để xác định chính xác đường dẫn.
+
+--------------------------------
+
+- Bình thường khi gọi liên kết sẽ dùng <a href="..."></a>, nhưng khi dùng nó thì sẽ reload lại trang nên react tạo ra thẻ <Link to="..."> 
+có chức năng tương tự như <a href=""></a> mà không reload lại trang như thẻ a và đúng với tiêu chí SPA.
+
+-----------------------------------
+
+Khi xây dựng giao diện lại phát sinh ra vấn đề: khi chọn vào 1 trang bất kỳ thì phải đánh dấu hoặc thay đổi màu sắc trên tên menu để biết là đang ở tại vị trí trang đó
+mà <Link></Link> thì không đáp ứng được vấn đề này nên react tiếp tục tạo ra <NavLink></NavLink> có chức năng như <Link> mà thêm vào 1 số chức năng active,.... để dev
+có thể tùy chỉnh.
+
+---------------------------------------
+
+Custom Link: tự định nghĩ ra thẻ <Link> mà không dùng mặc định <Link> của react cung cấp
+
+ const MenuLink = ({ lable, to, activeOnlyWhenExact }) => {
+      return (
+        <Route
+          path={to}
+          exact={activeOnlyWhenExact}
+          children={({ match }) => {
+            let active = match ? "active abc" : "";
+            return (
+              <li className={active}>
+                <NavLink to={to} activeClassName="active">
+                  {lable}
+                </NavLink>
+              </li>
+            );
+          }}
+        />
+      );
+
+ -------------------------------------------------------------
+
+ Khi xây dựng trang web thì khi router một trang web nếu địa chỉ URL tìm thấy đúng địa chỉ thì trả về trang còn không phải thông báo cho người dùng biết là lỗi
+
+----------------------------------------------------------------
+
+ Cách lấy router trên URL: chúng ta phải sử dụng đến đối tượng match của react-router. đối tượng này nó cung cấp lại cho dev các địa chỉ url,param,.....
+ Cách dùng: page about
+<Route path="/does-not-match"
+  children={({ match }) => (
+    // match === null
+    <About match={match}/>
+    />
+  )}
+/>
+
+--------------------------------------------------------------------
+
+ React-router còn cung cấp thuộc tính xác nhận trước khi chuyển trang đó là attribute: Prompt
+ - Mục đích: nếu người dùng đang nhập dữ liệu từ form nhưng chưa xác nhận mà muốn rời khỏi Page đó thì phải cho người dùng xác nhận trước khi rời khỏi nên react-router
+có thêm attribute Prompt.
+ - Cách dùng: <Prompt
+          when={true || false} :
+          message={(location) =>
+            `Bạn chắc chắn muốn thoát ${location.pathname}`
+          }
+        />
+ => + nếu when = true thì nó sẽ hiện thị thông báo và ngược lại
+    + message: dùng để hiển thị thông báo.
+    + location: attribute dùng để hiện thị vị trí muốn đến khi rời khỏi Page.
