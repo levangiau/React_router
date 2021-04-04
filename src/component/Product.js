@@ -36,6 +36,8 @@ class Product extends React.Component {
         </NavLink>
       );
     });
+    let { location } = this.props;
+    console.log(location);
     return (
       <div className="container">
         <h2>Danh Sách Sản Phẩm</h2>

@@ -33,10 +33,22 @@ class Login extends React.Component {
   render() {
     let { txtname, txtpass } = this.state;
     let loginUser = localStorage.getItem("user");
+    let { location } = this.props;
     console.log(loginUser);
     if (loginUser !== null) {
-      return <Redirect to="/product" />;
+      return (
+        <Redirect
+          to={{
+            pathname: "/product",
+            state: {
+              from: location,
+            },
+          }}
+        />
+      );
     }
+
+    console.log(location);
     return (
       <div className="container">
         <div className="row">
